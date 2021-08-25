@@ -3,14 +3,15 @@ import {
   useSubscription,
   gql,
 } from '@apollo/client';
-import Card from '@material-ui/core/Card';
-import CardHeader from '../components/CardHeader';
+import CurrentMetricCard from '../components/CurrentMetricCard';
+// import CurrentMetricCard from '../components/CurrentMetricCard';
+// import CurrentMetricCard from '../components/CurrentMetricCard'
 
 interface Measurement {
   metric: string,
   value: number,
   at: number,
-  unit: string
+  unit: string,
 }
 
 const METRIC_SUBSCRIPTION = gql`
@@ -29,16 +30,16 @@ const waterTemp: Measurement[] = [];
 const casingPressure: Measurement[] = [];
 const injValveOpen: Measurement[] = [];
 const flareTemp: Measurement[] = [];
-const selected: string[] = [];
+// const selected: string[] = ['Oil Temp', 'Tubing Pressure', 'Water Temp',
+// 'Casing Pressure', 'Inj Valve Open', 'Flare Temp'];
 
 const currentMetrics = {
-  oilTemp,
-  tubingPressure,
-  waterTemp,
-  casingPressure,
-  injValveOpen,
-  flareTemp,
-  selected,
+  'Oil Temp': oilTemp[0],
+  'Tubing Pressure': tubingPressure[0],
+  'Water Temp': waterTemp[0],
+  'Casing Pressure': casingPressure[0],
+  'Inj Valve Open': injValveOpen[0],
+  'Flare Temp': flareTemp[0],
 };
 
 const Metrics = () => {
@@ -46,26 +47,30 @@ const Metrics = () => {
   const { data, error } = result;
 
   const updateCurrentMetrics = (newMeasurement: Measurement) => {
-    console.log(newMeasurement);
-    console.log(newMeasurement.metric);
     switch (newMeasurement.metric) {
       case 'oilTemp':
         oilTemp.push(newMeasurement);
+        currentMetrics['Oil Temp'] = newMeasurement;
         break;
       case 'tubingPressure':
         tubingPressure.push(newMeasurement);
+        currentMetrics['Tubing Pressure'] = newMeasurement;
         break;
       case 'waterTemp':
         waterTemp.push(newMeasurement);
+        currentMetrics['Water Temp'] = newMeasurement;
         break;
       case 'casingPressure':
         casingPressure.push(newMeasurement);
+        currentMetrics['Casing Pressure'] = newMeasurement;
         break;
       case 'injValveOpen':
         injValveOpen.push(newMeasurement);
+        currentMetrics['Inj Valve Open'] = newMeasurement;
         break;
       case 'flareTemp':
         flareTemp.push(newMeasurement);
+        currentMetrics['Flare Temp'] = newMeasurement;
         break;
       default:
         console.log(newMeasurement.metric);
@@ -81,13 +86,14 @@ const Metrics = () => {
   }, [data, error]);
 
   return (
-    <Card>
-      <CardHeader title='Oil Temp' />
-      <ul>
-        {oilTemp.map((measurement) => <li>{measurement.value}</li>)}
-      </ul>
-
-    </Card>
+    <div>
+      {currentMetrics['Oil Temp'] ? <CurrentMetricCard metric='Oil Temp' value={currentMetrics['Oil Temp'].value} unit={currentMetrics['Oil Temp'].unit} /> : null}
+      {currentMetrics['Tubing Pressure'] ? <CurrentMetricCard metric='Tubing Pressure' value={currentMetrics['Tubing Pressure'].value} unit={currentMetrics['Tubing Pressure'].unit} /> : null}
+      {currentMetrics['Water Temp'] ? <CurrentMetricCard metric='Water Temp' value={currentMetrics['Water Temp'].value} unit={currentMetrics['Water Temp'].unit} /> : null}
+      {currentMetrics['Casing Pressure'] ? <CurrentMetricCard metric='Casing Pressure' value={currentMetrics['Casing Pressure'].value} unit={currentMetrics['Casing Pressure'].unit} /> : null}
+      {currentMetrics['Inj Valve Open'] ? <CurrentMetricCard metric='Inj Valve Open' value={currentMetrics['Inj Valve Open'].value} unit={currentMetrics['Inj Valve Open'].unit} /> : null}
+      {currentMetrics['Flare Temp'] ? <CurrentMetricCard metric='Flare Temp' value={currentMetrics['Flare Temp'].value} unit={currentMetrics['Flare Temp'].unit} /> : null}
+    </div>
   );
 };
 
