@@ -3,9 +3,9 @@ import {
   useSubscription,
   gql,
 } from '@apollo/client';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
 import CurrentMetricCard from '../components/CurrentMetricCard';
-// import CurrentMetricCard from '../components/CurrentMetricCard';
-// import CurrentMetricCard from '../components/CurrentMetricCard'
 
 interface Measurement {
   metric: string,
@@ -85,15 +85,29 @@ const Metrics = () => {
     }
   }, [data, error]);
 
+  const useStyles = makeStyles({
+    grid: {
+      padding: '15px',
+    },
+  });
+
+  const classes = useStyles();
+
   return (
-    <div>
+    <Grid
+      container
+      direction="column"
+      justifyContent="space-around"
+      alignItems="flex-start"
+      className={classes.grid}
+    >
       {currentMetrics['Oil Temp'] ? <CurrentMetricCard metric='Oil Temp' value={currentMetrics['Oil Temp'].value} unit={currentMetrics['Oil Temp'].unit} /> : null}
       {currentMetrics['Tubing Pressure'] ? <CurrentMetricCard metric='Tubing Pressure' value={currentMetrics['Tubing Pressure'].value} unit={currentMetrics['Tubing Pressure'].unit} /> : null}
       {currentMetrics['Water Temp'] ? <CurrentMetricCard metric='Water Temp' value={currentMetrics['Water Temp'].value} unit={currentMetrics['Water Temp'].unit} /> : null}
       {currentMetrics['Casing Pressure'] ? <CurrentMetricCard metric='Casing Pressure' value={currentMetrics['Casing Pressure'].value} unit={currentMetrics['Casing Pressure'].unit} /> : null}
       {currentMetrics['Inj Valve Open'] ? <CurrentMetricCard metric='Inj Valve Open' value={currentMetrics['Inj Valve Open'].value} unit={currentMetrics['Inj Valve Open'].unit} /> : null}
       {currentMetrics['Flare Temp'] ? <CurrentMetricCard metric='Flare Temp' value={currentMetrics['Flare Temp'].value} unit={currentMetrics['Flare Temp'].unit} /> : null}
-    </div>
+    </Grid>
   );
 };
 
