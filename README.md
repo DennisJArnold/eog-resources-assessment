@@ -1,5 +1,6 @@
-## Create React App Visualization
+![Screen Shot 2021-09-01 at 11 05 07 AM](https://user-images.githubusercontent.com/76070352/131713565-817d2703-c23d-4fa6-8f20-6385e0b1b4d4.png)
 
+## Create React App Visualization
 This assessment was bespoke handcrafted for dennisarnold.
 
 Read more about this assessment [here](https://react.eogresources.com)
