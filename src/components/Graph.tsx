@@ -30,7 +30,7 @@ const Graph = () => {
           />
         }
         )}
-        <YAxis hide={false} type="number" domain={[0, 'auto']} tickLine={true} tickCount={10}/>
+        <YAxis hide={false} type="number" domain={[0, 'dataMax']} tickLine={true} tickCount={10}/>
         {data.map((metric: Measurement[], i) => {
           if(metric.length < 1) return null;
           return <Line dataKey="value" data={metric} name={metric[0].metric} key={metric[0].metric} stroke={colors[i]}/>

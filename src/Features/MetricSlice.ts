@@ -42,21 +42,27 @@ export const MetricSlice = createSlice({
       switch (action.payload.metric) {
         case 'oilTemp':
           state.oilTemp = [...state.oilTemp, action.payload];
+          if (state.oilTemp.length > 1800) state.oilTemp.shift();
           break;
         case 'tubingPressure':
           state.tubingPressure = [...state.tubingPressure, action.payload];
+          if (state.tubingPressure.length > 1800) state.tubingPressure.shift();
           break;
         case 'waterTemp':
           state.waterTemp = [...state.waterTemp, action.payload];
+          if (state.waterTemp.length > 1800) state.waterTemp.shift();
           break;
         case 'casingPressure':
           state.casingPressure = [...state.casingPressure, action.payload];
+          if (state.casingPressure.length > 1800) state.casingPressure.shift();
           break;
         case 'injValveOpen':
           state.injValveOpen = [...state.injValveOpen, action.payload];
+          if (state.injValveOpen.length > 1800) state.injValveOpen.shift();
           break;
         case 'flareTemp':
           state.flareTemp = [...state.flareTemp, action.payload];
+          if (state.flareTemp.length > 1800) state.flareTemp.shift();
           break;
         default:
           console.log(action.payload.metric);
