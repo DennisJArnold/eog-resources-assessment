@@ -9,10 +9,14 @@ import {
 } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
+import { Provider } from 'react-redux';
+// import { createStore } from 'redux';
+import Store from './store/index';
 import App from './App';
 
+const store = Store();
 const httpLink = new HttpLink({
-  uri: 'ws://react.eogresources.com/graphql',
+  uri: 'https://react.eogresources.com/graphql',
 });
 
 const wsLink = new WebSocketLink({
@@ -41,7 +45,9 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </ApolloProvider>,
   document.getElementById('root'),
 );

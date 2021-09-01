@@ -1,18 +1,27 @@
+/* eslint-disable */
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   useSubscription,
   gql,
 } from '@apollo/client';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import CurrentMetricCard from '../components/CurrentMetricCard';
+// import CurrentMetricCard from '../components/CurrentMetricCard';
+import { actions, reducer } from './MetricSlice';
 
-interface Measurement {
-  metric: string,
-  value: number,
-  at: number,
-  unit: string,
-}
+// interface Measurement {
+//   metric: string,
+//   value: number,
+//   at: number,
+//   unit: string,
+// }
+
+// interface MeasurementQuery {
+//   metricName: string,
+//   after?: number,
+//   before?: number,
+// }
 
 const METRIC_SUBSCRIPTION = gql`
 subscription OnNewMeasurement {
@@ -24,66 +33,49 @@ subscription OnNewMeasurement {
   }
 }`;
 
-const oilTemp: Measurement[] = [];
-const tubingPressure: Measurement[] = [];
-const waterTemp: Measurement[] = [];
-const casingPressure: Measurement[] = [];
-const injValveOpen: Measurement[] = [];
-const flareTemp: Measurement[] = [];
-// const selected: string[] = ['Oil Temp', 'Tubing Pressure', 'Water Temp',
-// 'Casing Pressure', 'Inj Valve Open', 'Flare Temp'];
+// const HISTORIC_METRICS = gql`
+// query
+// getHistoricMeasurements($historicQuery: MeasurementQuery!){
+//   getMeasurements(input: $historicQuery)
+//     {
+//         metric
+//         at
+//         value
+//         unit
+//     }
+// }
+// `;
 
-const currentMetrics = {
-  'Oil Temp': oilTemp[0],
-  'Tubing Pressure': tubingPressure[0],
-  'Water Temp': waterTemp[0],
-  'Casing Pressure': casingPressure[0],
-  'Inj Valve Open': injValveOpen[0],
-  'Flare Temp': flareTemp[0],
-};
+// const minutesToSubtract = 30;
+// const currentDate = new Date();
+// const initialTimestamp = currentDate.getTime() - minutesToSubtract * 60000;
 
 const Metrics = () => {
+  // const getHistoricMetrics = (name: string) => {
+  //   const query: MeasurementQuery = {
+  //     metricName: name,
+  //     after: initialTimestamp,
+  //   };
+  //   const { data, loading, error } = useQuery(HISTORIC_METRICS, {
+  //     variables: { historicQuery: query },
+  //   });
+  //   if (error) console.log(error);
+  //   if (loading) return [];
+  //   return data.getMeasurements;
+  // };
+
+  // const { getRecentMetrics, updateCurrentMetrics } = actions;
+  const dispatch = useDispatch();
+  // const currentMetrics = dispatch(actions.getRecentMetrics());
   const result = useSubscription(METRIC_SUBSCRIPTION);
   const { data, error } = result;
-
-  const updateCurrentMetrics = (newMeasurement: Measurement) => {
-    switch (newMeasurement.metric) {
-      case 'oilTemp':
-        oilTemp.push(newMeasurement);
-        currentMetrics['Oil Temp'] = newMeasurement;
-        break;
-      case 'tubingPressure':
-        tubingPressure.push(newMeasurement);
-        currentMetrics['Tubing Pressure'] = newMeasurement;
-        break;
-      case 'waterTemp':
-        waterTemp.push(newMeasurement);
-        currentMetrics['Water Temp'] = newMeasurement;
-        break;
-      case 'casingPressure':
-        casingPressure.push(newMeasurement);
-        currentMetrics['Casing Pressure'] = newMeasurement;
-        break;
-      case 'injValveOpen':
-        injValveOpen.push(newMeasurement);
-        currentMetrics['Inj Valve Open'] = newMeasurement;
-        break;
-      case 'flareTemp':
-        flareTemp.push(newMeasurement);
-        currentMetrics['Flare Temp'] = newMeasurement;
-        break;
-      default:
-        console.log(newMeasurement.metric);
-    }
-    console.log(currentMetrics);
-  };
-
   useEffect(() => {
     if (error) console.log(error);
     if (data) {
-      updateCurrentMetrics(data.newMeasurement);
+      dispatch(actions.updateCurrentMetrics(data.newMeasurement));
+      console.log(data.newMeasurement);
     }
-  }, [data, error]);
+  }, [dispatch, data, error]);
 
   const useStyles = makeStyles({
     grid: {
@@ -101,12 +93,12 @@ const Metrics = () => {
       alignItems="flex-start"
       className={classes.grid}
     >
-      {currentMetrics['Oil Temp'] ? <CurrentMetricCard metric='Oil Temp' value={currentMetrics['Oil Temp'].value} unit={currentMetrics['Oil Temp'].unit} /> : null}
-      {currentMetrics['Tubing Pressure'] ? <CurrentMetricCard metric='Tubing Pressure' value={currentMetrics['Tubing Pressure'].value} unit={currentMetrics['Tubing Pressure'].unit} /> : null}
-      {currentMetrics['Water Temp'] ? <CurrentMetricCard metric='Water Temp' value={currentMetrics['Water Temp'].value} unit={currentMetrics['Water Temp'].unit} /> : null}
-      {currentMetrics['Casing Pressure'] ? <CurrentMetricCard metric='Casing Pressure' value={currentMetrics['Casing Pressure'].value} unit={currentMetrics['Casing Pressure'].unit} /> : null}
-      {currentMetrics['Inj Valve Open'] ? <CurrentMetricCard metric='Inj Valve Open' value={currentMetrics['Inj Valve Open'].value} unit={currentMetrics['Inj Valve Open'].unit} /> : null}
-      {currentMetrics['Flare Temp'] ? <CurrentMetricCard metric='Flare Temp' value={currentMetrics['Flare Temp'].value} unit={currentMetrics['Flare Temp'].unit} /> : null}
+      {/* {currentMetrics.oilTemp ? <CurrentMetricCard metric='Oil Temp' value={currentMetrics['Oil Temp'].value} unit={currentMetrics['Oil Temp'].unit} /> : null}
+      {currentMetrics.tubingPressure ? <CurrentMetricCard metric='Tubing Pressure' value={currentMetrics['Tubing Pressure'].value} unit={currentMetrics['Tubing Pressure'].unit} /> : null}
+      {currentMetrics.waterTemp ? <CurrentMetricCard metric='Water Temp' value={currentMetrics['Water Temp'].value} unit={currentMetrics['Water Temp'].unit} /> : null}
+      {currentMetrics.casingPressure ? <CurrentMetricCard metric='Casing Pressure' value={currentMetrics['Casing Pressure'].value} unit={currentMetrics['Casing Pressure'].unit} /> : null}
+      {currentMetrics.injValveOpen ? <CurrentMetricCard metric='Inj Valve Open' value={currentMetrics['Inj Valve Open'].value} unit={currentMetrics['Inj Valve Open'].unit} /> : null}
+      {currentMetrics.flareTemp ? <CurrentMetricCard metric='Flare Temp' value={currentMetrics['Flare Temp'].value} unit={currentMetrics['Flare Temp'].unit} /> : null} */}
     </Grid>
   );
 };
