@@ -1,6 +1,9 @@
 /* eslint-disable */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+export type ApiErrorAction = {
+  error: string;
+};
 export interface Measurement {
   metric: string,
   value: number,
@@ -8,7 +11,6 @@ export interface Measurement {
   unit: string,
 }
 
-// Define a type for the slice state
 interface MetricState {
   oilTemp: Measurement[],
   tubingPressure: Measurement[],
@@ -19,7 +21,6 @@ interface MetricState {
   selected: string[],
 }
 
-// Define the initial state using that type
 const initialState: MetricState = {
   oilTemp: [],
   tubingPressure: [],
@@ -28,10 +29,6 @@ const initialState: MetricState = {
   injValveOpen: [],
   flareTemp: [],
   selected: ['oilTemp', 'tubingPressure', 'waterTemp', 'casingPressure', 'injValveOpen', 'flareTemp'],
-};
-
-export type ApiErrorAction = {
-  error: string;
 };
 
 export const MetricSlice = createSlice({
@@ -70,15 +67,16 @@ export const MetricSlice = createSlice({
     },
     getMetrics: (state:MetricState) => state,
     toggleSelectedMetric: (state: MetricState, action: PayloadAction<string>) => {
-      if (!state.selected.includes(action.payload)) state.selected = [...state.selected, action.payload];
-      else state.selected.splice(state.selected.indexOf(action.payload), 1);
-    }, 
-    metricsApiErrorRecieved: (state, action: PayloadAction<ApiErrorAction>) => state,
+      if (!state.selected.includes(action.payload)) {
+        state.selected = [...state.selected, action.payload];
+      } else state.selected.splice(state.selected.indexOf(action.payload), 1);
+    },
+    apiErrorRecieved: (state, action: PayloadAction<ApiErrorAction>) => state,
   },
 });
 
 export const selectMetrics = (state: any) => {
-  let metrics = [];
+  const metrics = [];
   let key:keyof typeof state.metrics;
   for (key in state.metrics) {
     if (key !== 'selected' && state.metrics.selected.includes(key)) metrics.push(state.metrics[key]);
@@ -86,6 +84,4 @@ export const selectMetrics = (state: any) => {
   return metrics;
 };
 
-export const actions = MetricSlice.actions;
-
-export const { reducer } = MetricSlice;
+export const { reducer, actions } = MetricSlice;

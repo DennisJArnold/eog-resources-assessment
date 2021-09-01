@@ -10,7 +10,6 @@ import {
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { Provider } from 'react-redux';
-// import { createStore } from 'redux';
 import Store from './store/index';
 import App from './App';
 

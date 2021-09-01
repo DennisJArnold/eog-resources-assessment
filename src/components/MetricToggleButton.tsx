@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-// import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { actions } from '../Features/MetricSlice';
 
@@ -11,8 +10,6 @@ type Props = {
 const MetricToggleButton = ({ metric }: Props) => {
   const dispatch = useDispatch();
   const toggleSelection = (selection: string) => {
-    console.log('ATTEMPTING TO TOGGLE!');
-    console.log(selection);
     dispatch(actions.toggleSelectedMetric(selection));
   };
 
