@@ -65,7 +65,7 @@ export const MetricSlice = createSlice({
     getMetrics: (state:MetricState) => state,
     toggleSelectedMetric: (state: MetricState, action: PayloadAction<string>) => {
       if (!state.selected.includes(action.payload)) state.selected = [...state.selected, action.payload];
-      else state.selected = state.selected.filter(a => a !== action.payload);
+      else state.selected.splice(state.selected.indexOf(action.payload), 1);
     }, 
     metricsApiErrorRecieved: (state, action: PayloadAction<ApiErrorAction>) => state,
   },
@@ -75,7 +75,7 @@ export const selectMetrics = (state: any) => {
   let metrics = [];
   let key:keyof typeof state.metrics;
   for (key in state.metrics) {
-    if (key !== 'selected') metrics.push(state.metrics[key]);
+    if (key !== 'selected' && state.metrics.selected.includes(key)) metrics.push(state.metrics[key]);
   }
   return metrics;
 };
