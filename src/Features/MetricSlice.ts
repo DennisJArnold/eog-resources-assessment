@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface Measurement {
+export interface Measurement {
   metric: string,
   value: number,
   at: number,
@@ -63,6 +63,10 @@ export const MetricSlice = createSlice({
       }
     },
     getMetrics: (state:MetricState) => state,
+    toggleSelectedMetric: (state: MetricState, action: PayloadAction<string>) => {
+      if (!state.selected.includes(action.payload)) state.selected = [...state.selected, action.payload];
+      else state.selected = state.selected.filter(a => a !== action.payload);
+    }, 
     metricsApiErrorRecieved: (state, action: PayloadAction<ApiErrorAction>) => state,
   },
 });
