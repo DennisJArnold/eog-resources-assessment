@@ -16,6 +16,7 @@ interface MetricState {
   casingPressure: Measurement[],
   injValveOpen: Measurement[],
   flareTemp: Measurement[],
+  selected: string[],
 }
 
 // Define the initial state using that type
@@ -26,6 +27,7 @@ const initialState: MetricState = {
   casingPressure: [],
   injValveOpen: [],
   flareTemp: [],
+  selected: ['oilTemp', 'tubingPressure', 'waterTemp', 'casingPressure', 'injValveOpen', 'flareTemp'],
 };
 
 export type ApiErrorAction = {
@@ -60,19 +62,20 @@ export const MetricSlice = createSlice({
           console.log(action.payload.metric);
       }
     },
-    // getRecentMetrics: (state: MetricState) => (
-    //   {
-    //     oilTemp: state.oilTemp.slice(-1),
-    //     tubingPressure: state.tubingPressure.slice(-1),
-    //     waterTemp: state.waterTemp.slice(-1),
-    //     casingPressure: state.casingPressure.slice(-1),
-    //     injValveOpen: state.injValveOpen.slice(-1),
-    //     flareTemp: state.flareTemp.slice(-1),
-    //   }
-    // ),
+    getMetrics: (state:MetricState) => state,
     metricsApiErrorRecieved: (state, action: PayloadAction<ApiErrorAction>) => state,
   },
 });
+
+export const selectMetrics = (state: any) => {
+  let metrics = [];
+  let key:keyof typeof state.metrics;
+  for (key in state.metrics) {
+    if (key !== 'selected') metrics.push(state.metrics[key]);
+  }
+  return metrics;
+};
+
 export const actions = MetricSlice.actions;
 
 export const { reducer } = MetricSlice;
