@@ -69,6 +69,8 @@ const Metrics = () => {
     grid: {
       padding: '15px',
       flexDirection: 'row',
+      justifyContent: "space-around",
+      alignItems: "flex-start",
     },
   });
 
@@ -82,9 +84,6 @@ const Metrics = () => {
     <Grid>
       <Grid
         container
-        direction="column"
-        justifyContent="space-around"
-        alignItems="flex-start"
         className={classes.grid}
       >
         {

@@ -16,7 +16,7 @@ const MetricToggleButton = ({ metric }: Props) => {
     dispatch(actions.toggleSelectedMetric(selection));
   };
 
-  return <Button variant="outlined" color="secondary" onClick={() => toggleSelection(metric)}>{metric}</Button>;
+  return <Button variant="contained" color="secondary" onClick={() => toggleSelection(metric)}>{metric}</Button>;
 };
 
 export default MetricToggleButton;
